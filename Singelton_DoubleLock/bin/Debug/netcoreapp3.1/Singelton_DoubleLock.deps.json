@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Singelton_DoubleLock/1.0.0": {
+        "runtime": {
+          "Singelton_DoubleLock.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Singelton_DoubleLock/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
