@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace Singelton_DoubleLock
@@ -41,10 +41,36 @@ namespace Singelton_DoubleLock
             Console.WriteLine(message);
         }
     }
+
+    public sealed class SingeltonLazyEagleLoading
+    {
+        private static int cnts = 0;
+        //lazy loading initialization
+        public static readonly Lazy<SingeltonLazyEagleLoading> instance2 = new Lazy<SingeltonLazyEagleLoading>(() => new SingeltonLazyEagleLoading());
+        //eagle loading initialization
+        //private static readonly SingeltonLazyEagleLoading instance = new SingeltonLazyEagleLoading();
+        private SingeltonLazyEagleLoading()
+        {
+            cnts = cnts + 1;
+            Console.WriteLine("SingeltonLazyEagleLoading instance count" + cnts);
+        }
+        public static SingeltonLazyEagleLoading GetInstance
+        {
+            get 
+            {
+                return instance2.Value;
+            }
+        }
+        public void display(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+    }
     class Program
     {
         static void Main(string[] args)
-        {
+     {
             //this code moved to Method1
             //Singelton obj1 = Singelton.GetInstance;
             //obj1.Display("Object 1");
@@ -54,6 +80,7 @@ namespace Singelton_DoubleLock
             //obj2.Display("Object 1");
 
             Parallel.Invoke(() => Method1(), ()=> Method2());
+            Parallel.Invoke(() => Method11(), () => Method22());
             Console.ReadLine();
         }
         public static void Method1()
@@ -65,6 +92,17 @@ namespace Singelton_DoubleLock
         {
             Singelton obj1 = Singelton.GetInstance;
             obj1.Display("Object 1");
+        }
+
+        public static void Method11()
+        {
+            SingeltonLazyEagleLoading obj1 = SingeltonLazyEagleLoading.GetInstance;
+            obj1.display("Object 11");
+        }
+        public static void Method22()
+        {
+            SingeltonLazyEagleLoading obj1 = SingeltonLazyEagleLoading.GetInstance;
+            obj1.display("Object 22");
         }
     }
 }
