@@ -1,61 +1,70 @@
 ﻿using System;
+using System.Threading.Tasks;
 
-namespace FactoryDesignPattern_1
+namespace Singelton_DoubleLock
 {
-    public interface IEmployeeManager
+    public class Singelton
     {
-        decimal GetBonus();
-        decimal GetPay();
-    }
-    public class PEmployee : IEmployeeManager
-    {
-        public decimal GetBonus()
+        //Here private variable can't access outside of the class but return through the public method
+        private static Singelton instance = null;
+        private static readonly object obj = new object();
+        private static int count = 0;
+        private Singelton()
         {
-            return 5;
+            count = count + 1;
+            Console.WriteLine("Object count" + count);
         }
-
-        public decimal GetPay()
+        public static Singelton GetInstance
         {
-            return 100;
-        }
-    }
-    public class CEmployee : IEmployeeManager
-    {
-        public decimal GetBonus()
-        {
-            return 20;
-        }
-
-        public decimal GetPay()
-        {
-            return 200;
-        }
-    }
-    public class IEmployeeManagerFactory
-    {
-        public IEmployeeManager GetIEmployeeManager(int empType) 
-        {
-            IEmployeeManager manager = null;
-            if (empType == 1)
+            get
             {
-                manager = new PEmployee();
+                if (instance == null) 
+                { 
+                    lock (obj)
+                    {
+                        if (instance == null)
+                            instance = new Singelton();
+
+                    }
             }
-            else if(empType==2)
-            {
-                manager = new CEmployee();
+                return instance;
             }
-            return manager;
+                
+        }
+        private int b = 5;
+        public int a()
+        {
+            return b;
+        }
+        public void Display(string message)
+        {
+            Console.WriteLine(message);
         }
     }
     class Program
     {
         static void Main(string[] args)
         {
-            IEmployeeManagerFactory manager = new IEmployeeManagerFactory();
-            IEmployeeManager emp = manager.GetIEmployeeManager(1);
-            Console.WriteLine("Employee details: bonus: {0}, pay:{1}",emp.GetBonus(),emp.GetPay());
+            //this code moved to Method1
+            //Singelton obj1 = Singelton.GetInstance;
+            //obj1.Display("Object 1");
+
+            //this code moved to Method2
+            //Singelton obj2 = Singelton.GetInstance;
+            //obj2.Display("Object 1");
+
+            Parallel.Invoke(() => Method1(), ()=> Method2());
             Console.ReadLine();
+        }
+        public static void Method1()
+        {
+            Singelton obj1 = Singelton.GetInstance;
+            obj1.Display("Object 1");
+        }
+        public static void Method2()
+        {
+            Singelton obj1 = Singelton.GetInstance;
+            obj1.Display("Object 1");
         }
     }
 }
- 
