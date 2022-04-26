@@ -1,4 +1,6 @@
 ﻿using System;
+//factory - decide which class interface will retrun
+//manager - logics to call factory class method to get the instace of an object
 
 namespace FactoryDesignPattern_1
 {
