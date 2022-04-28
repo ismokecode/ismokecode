@@ -1,61 +1,93 @@
-﻿using System;
+using System;
 
-namespace ConsoleApp3
+namespace ConsoleApp4
 {
-    public class Employee
-    {
-        public int type;
-        public decimal houseAllowance;
-        public decimal medicleAllowance;
-        public decimal bonus;
-        public decimal pay;
-    }
+    //Create method - when two method homeAllowance and medicleAllowance eligible based on EmployeeType then
+    //Create this method on class level and base factory class have abstract method and define and call class level
+    //and initialized this class to interface to invoke common method and return back to apply salary.
     public interface IManager
     {
-        decimal getPay();
-        decimal getBonus();
+        decimal GetPay();
+        decimal GetBonus();
     }
     public class PEmployeeManager : IManager
     {
-        public decimal getBonus()
-        {
-            return 10;
-        }
-
-        public decimal getPay()
+        public decimal GetBonus()
         {
             return 100;
         }
-        public decimal homeAllowance()
+
+        public decimal GetPay()
+        {
+            return 50;
+        }
+        public decimal GetHomeAllowance()
         {
             return 500;
         }
     }
     public class CEmployeeManager : IManager
     {
-        public decimal getBonus()
-        {
-            return 20;
-        }
-
-        public decimal getPay()
+        public decimal GetBonus()
         {
             return 200;
         }
-        public decimal medicleAllowance()
+
+        public decimal GetPay()
         {
-            return 250;
+            return 100;
+        }
+        public decimal GetMedicleAllowance()
+        {
+            return 200;
+        }
+    }
+    public class Employee
+    {
+        public decimal type;
+        public decimal pay;
+        public decimal bonus;
+        public decimal medicleAllowance;
+        public decimal homeAllowance;
+    }
+    public abstract class BaseFactory
+    {
+        public Employee _emp = new Employee();
+        public IManager manager = null;
+        public BaseFactory(Employee emp)
+        {
+            this._emp = emp;
+        }
+        public abstract IManager Create();
+        public Employee ApplySalary()
+        {
+            manager = this.Create();
+            _emp.bonus = manager.GetBonus();
+            _emp.pay = manager.GetPay();
+            return _emp;
+        }
+    }
+    public class PEmployeeBaseFactory : BaseFactory
+    {
+        public PEmployeeBaseFactory(Employee emp) : base(emp)
+        {
+        }
+        public override IManager Create()
+        {
+            PEmployeeManager pemp = new PEmployeeManager();
+            _emp.homeAllowance = pemp.GetHomeAllowance();
+            manager = pemp;
+            return manager;
         }
     }
     public class Factory
     {
-        public IManager manager = null;
-        public BaseFactory baseManager = null;
-        public IManager GetInstance(Employee emp)
+        IManager manager = null;
+        Employee emp = new Employee();
+        public IManager GetInstance()
         {
             if (emp.type == 1)
             {
-
                 manager = new PEmployeeManager();
             }
             else if (emp.type == 2)
@@ -64,70 +96,27 @@ namespace ConsoleApp3
             }
             return manager;
         }
-        public BaseFactory GetBaseInstance(Employee emp)
+        public BaseFactory factoryManager = null;
+        public BaseFactory GetInstanceBase(Employee emp)
         {
             if (emp.type == 1)
             {
-                baseManager = new PEmployeeFactory(emp);
+                factoryManager = new PEmployeeBaseFactory(emp);
             }
-            else 
+            else if (emp.type == 2)
             {
-                baseManager = new CEmployeeFactory(emp);
+                manager = new CEmployeeManager();
             }
-            return baseManager;
-        }
-    }
-    public abstract class BaseFactory
-    {
-        protected Employee _emp= new Employee();
-        public BaseFactory(Employee emp)
-        {
-            _emp = emp;
-        }
-        public abstract IManager Create();
-        public Employee ApplySalary()
-        {
-            IManager manager = this.Create();//calling and creating inteface objecte based on condition
-            _emp.pay = manager.getPay();//assigning all value here
-            _emp.bonus = manager.getBonus();
-            return _emp;
-        }
-        
-    }
-    public class PEmployeeFactory : BaseFactory
-    {
-        public PEmployeeFactory(Employee emp):base(emp)
-        {
-
-        }
-        public override IManager Create()
-        {
-            PEmployeeManager manager = new PEmployeeManager();
-            _emp.houseAllowance = manager.homeAllowance();           
-            return manager;
-        }
-    }
-    public class CEmployeeFactory : BaseFactory
-    {
-        public CEmployeeFactory(Employee emp) : base(emp)
-        {
-
-        }
-        public override IManager Create()
-        {
-            CEmployeeManager manager = new CEmployeeManager();
-            manager.medicleAllowance();
-            return manager;
+            return factoryManager;
         }
     }
     class Program
     {
         static void Main(string[] args)
         {
-            Employee emp = new Employee();
-            emp.type = 1;
-            BaseFactory factory = new Factory().GetBaseInstance(emp);
-            emp = factory.ApplySalary();
+            Employee emp = new Employee() { type=1};
+            BaseFactory bf = new Factory().GetInstanceBase(emp);
+            emp = bf.ApplySalary();
             Console.WriteLine("Hello World!");
         }
     }
