@@ -5,6 +5,10 @@ namespace ConsoleApp4
     //Create method - when two method homeAllowance and medicleAllowance eligible based on EmployeeType then
     //Create this method on class level and base factory class have abstract method and define and call class level
     //and initialized this class to interface to invoke common method and return back to apply salary.
+
+    //Create method separately define by PEmployeeBaseFactory and CEmployeeByBaseFactory and 
+    //instance of this class invoke the separate method and assign back to variable and return common  
+    //method as by assigning object to inteface and another method use those inteface to assign employee value.
     public interface IManager
     {
         decimal GetPay();
