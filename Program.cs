@@ -3,7 +3,10 @@ using System.Threading.Tasks;
 
 namespace Singelton_DoubleLock
 {
-    public class Singelton
+    // Why sealed if we inherit this Singelton class to another class 
+    // then private constructor restrict to create an object of Singeton class
+    // but if we move into the Singelton class then it will allow that's called nested class.
+    public class sealed Singelton
     {
         //Here private variable can't access outside of the class but return through the public method
         private static Singelton instance = null;
