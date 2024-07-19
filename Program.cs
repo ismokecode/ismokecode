@@ -9,12 +9,12 @@ namespace Singelton_DoubleLock
     // but if we move into the Singelton class then it will allow that's called nested class.
     // 4. eagel loading it self a thread safe, CLR take care of variable initialization:
         //a. private static Singelton instance = null; instead of null create an instance of an Singeton class.
-        //b. eg. 
+        //b. eg. private static Singelton instance = new 
     public class sealed Singelton
     {
         //Here private variable can't access outside of the class but return through the public method
-        private static Singelton instance = null;
-        private static readonly object obj = new object();
+        private static Singelton instance = null; // if we make readonly then can't initialize later
+        private static readonly object obj = new object(); 
         private static int count = 0;
         private Singelton()
         {
@@ -27,7 +27,7 @@ namespace Singelton_DoubleLock
             {
                 if (instance == null) 
                 { 
-                    lock (obj)
+                    lock (obj) // double no needed if we use eager loading on top: private static readonly Singelton instance = new Singelton();
                     {
                         if (instance == null)
                             instance = new Singelton();
