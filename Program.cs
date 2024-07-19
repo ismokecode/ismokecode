@@ -7,7 +7,8 @@ namespace Singelton_DoubleLock
     // Why static - becoz of static members or method only contains static type eg: private static Singelton instance = null;
     // then private constructor restrict to create an object of Singeton class
     // but if we move into the Singelton class then it will allow that's called nested class.
-    // eagel loading it self a thread safe: private static Singelton instance = null; instead of null create an instance of an Singeton class.
+    // eagel loading it self a thread safe, CLR take care of variable initialization:
+            //private static Singelton instance = null; instead of null create an instance of an Singeton class.
     public class sealed Singelton
     {
         //Here private variable can't access outside of the class but return through the public method
