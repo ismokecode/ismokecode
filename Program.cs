@@ -10,6 +10,9 @@ namespace Singelton_DoubleLock
     // 4. eagel loading it self a thread safe, CLR take care of variable initialization:
         //a. private static Singelton instance = null; instead of null create an instance of an Singeton class.
         //b. eg. private static Singelton instance = new 
+    //5. Lazy Loading on top no need to check locking for paraller invoke:
+        // private static readonly Lazy<Singelton> instance = new Lazy<Singelton>(()=>new Singelton()); GetInstance() method > Get property method return > instance.value;
+        //
     public class sealed Singelton
     {
         //Here private variable can't access outside of the class but return through the public method
