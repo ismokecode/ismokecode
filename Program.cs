@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 namespace Singelton_DoubleLock
 {
     // Why sealed if we inherit this Singelton class to another class 
+    // Why static - becoz of static members or method only contains static type eg: private static Singelton instance = null;
     // then private constructor restrict to create an object of Singeton class
     // but if we move into the Singelton class then it will allow that's called nested class.
     // eagel loading it self a thread safe: private static Singelton instance = null; instead of null create an instance of an Singeton class.
